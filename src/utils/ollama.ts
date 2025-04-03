@@ -20,37 +20,65 @@ export const generateCommitMessage = async (
 	timeout: number
 ) => {
 	try {
-		const response = await fetch('http://localhost:11434/api/generate', {
+		const prompt = `${generatePrompt(locale, maxLength, type)}\n\n${diff}`;
+		console.log('Sending prompt to Ollama:', prompt); // Debug log
+
+		const response = await fetch('http://127.0.0.1:11434/api/generate', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				model,
-				prompt: `${generatePrompt(locale, maxLength, type)}\n\n${diff}`,
+				prompt,
 				stream: false,
+				options: {
+					temperature: 0.7,
+					top_p: 1,
+					repeat_penalty: 1.1,
+				},
 			}),
 		});
 
 		if (!response.ok) {
+			const errorText = await response.text();
+			console.error('Ollama API Error:', errorText); // Debug log
 			throw new KnownError(
-				`Ollama API Error: ${response.status} - ${response.statusText}`
+				`Ollama API Error: ${response.status} - ${response.statusText}\n${errorText}`
 			);
 		}
 
 		const data = await response.json();
-		const message = sanitizeMessage(data.response);
+		console.log('Ollama API Response:', data); // Debug log
 
-		// Para mantener la compatibilidad con el código existente, devolvemos un array
+		if (!data.response) {
+			throw new KnownError('No response received from Ollama');
+		}
+
+		const message = sanitizeMessage(data.response);
 		return [message];
 	} catch (error) {
 		const errorAsAny = error as any;
+		console.error('Error details:', errorAsAny); // Debug log
+
+		if (errorAsAny.code === 'ECONNREFUSED') {
+			throw new KnownError(
+				'Could not connect to Ollama. Make sure Ollama is running locally on port 11434.'
+			);
+		}
 		if (errorAsAny.code === 'ENOTFOUND') {
 			throw new KnownError(
-				`Error connecting to Ollama (${errorAsAny.syscall}). Is Ollama running?`
+				'Could not resolve Ollama host. Make sure Ollama is running locally.'
+			);
+		}
+		if (errorAsAny.message.includes('fetch failed')) {
+			throw new KnownError(
+				'Failed to connect to Ollama. Make sure Ollama is running locally on port 11434.'
 			);
 		}
 
-		throw errorAsAny;
+		throw new KnownError(
+			`Error generating commit message: ${errorAsAny.message}`
+		);
 	}
 };
