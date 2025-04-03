@@ -3,7 +3,7 @@ import { intro, outro, spinner } from '@clack/prompts';
 import { black, green, red, bgCyan } from 'kolorist';
 import { getStagedDiff } from '../utils/git.js';
 import { getConfig } from '../utils/config.js';
-import { generateCommitMessage } from '../utils/openai.js';
+import { generateCommitMessage } from '../utils/ollama.js';
 import { KnownError, handleCliError } from '../utils/error.js';
 
 const [messageFilePath, commitSource] = process.argv.slice(2);
@@ -40,15 +40,13 @@ export default () =>
 		let messages: string[];
 		try {
 			messages = await generateCommitMessage(
-				config.OPENAI_KEY,
 				config.model,
 				config.locale,
 				staged!.diff,
 				config.generate,
 				config['max-length'],
 				config.type,
-				config.timeout,
-				config.proxy
+				config.timeout
 			);
 		} finally {
 			s.stop('Changes analyzed');

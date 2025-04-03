@@ -82,10 +82,10 @@ const configParsers = {
 	},
 	model(model?: string) {
 		if (!model || model.length === 0) {
-			return 'gpt-3.5-turbo';
+			return 'deepseek-coder:instruct';
 		}
 
-		return model as TiktokenModel;
+		return model;
 	},
 	timeout(timeout?: string) {
 		if (!timeout) {

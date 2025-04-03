@@ -14,7 +14,7 @@ import {
 	getDetectedMessage,
 } from '../utils/git.js';
 import { getConfig } from '../utils/config.js';
-import { generateCommitMessage } from '../utils/openai.js';
+import { generateCommitMessage } from '../utils/ollama.js';
 import { KnownError, handleCliError } from '../utils/error.js';
 
 export default async (
@@ -65,15 +65,13 @@ export default async (
 		let messages: string[];
 		try {
 			messages = await generateCommitMessage(
-				config.OPENAI_KEY,
 				config.model,
 				config.locale,
 				staged.diff,
 				config.generate,
 				config['max-length'],
 				config.type,
-				config.timeout,
-				config.proxy
+				config.timeout
 			);
 		} finally {
 			s.stop('Changes analyzed');
