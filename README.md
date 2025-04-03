@@ -1,10 +1,10 @@
 <div align="center">
   <div>
-    <img src=".github/screenshot.png" alt="AI Commits"/>
-    <h1 align="center">AI Commits</h1>
+    <img src=".github/screenshot.png" alt="Ollama Commits"/>
+    <h1 align="center">Ollama Commits</h1>
   </div>
-	<p>A CLI that writes your git commit messages for you with AI. Never write a commit message again.</p>
-	<a href="https://www.npmjs.com/package/aicommits"><img src="https://img.shields.io/npm/v/aicommits" alt="Current version"></a>
+	<p>A CLI that writes your git commit messages for you with Ollama AI. Never write a commit message again.</p>
+	<a href="https://www.npmjs.com/package/ollama-commits"><img src="https://img.shields.io/npm/v/ollama-commits" alt="Current version"></a>
 </div>
 
 ---
@@ -13,89 +13,85 @@
 
 > The minimum supported version of Node.js is the latest v14. Check your Node.js version with `node --version`.
 
-1. Install _aicommits_:
+1. Install _ollama-commits_:
 
    ```sh
-   npm install -g aicommits
+   npm install -g ollama-commits
    ```
 
-2. Retrieve your API key from [OpenAI](https://platform.openai.com/account/api-keys)
+2. Make sure you have [Ollama](https://ollama.ai/) installed and running locally
 
-   > Note: If you haven't already, you'll have to create an account and set up billing.
-
-3. Set the key so aicommits can use it:
+3. Pull the model you want to use (default is deepseek-coder:instruct):
 
    ```sh
-   aicommits config set OPENAI_KEY=<your token>
+   ollama pull deepseek-coder:instruct
    ```
 
-   This will create a `.aicommits` file in your home directory.
+   You can also use other models like llama3.2 or any other model available in Ollama.
 
 ### Upgrading
 
 Check the installed version with:
 
 ```
-aicommits --version
+ollama-commits --version
 ```
 
-If it's not the [latest version](https://github.com/Nutlope/aicommits/releases/latest), run:
+If it's not the [latest version](https://github.com/Nutlope/ollama-commits/releases/latest), run:
 
 ```sh
-npm update -g aicommits
+npm update -g ollama-commits
 ```
 
 ## Usage
 
 ### CLI mode
 
-You can call `aicommits` directly to generate a commit message for your staged changes:
+You can call `ollama-commits` directly to generate a commit message for your staged changes:
 
 ```sh
 git add <files...>
-aicommits
+ollama-commits
 ```
 
-`aicommits` passes down unknown flags to `git commit`, so you can pass in [`commit` flags](https://git-scm.com/docs/git-commit).
+`ollama-commits` passes down unknown flags to `git commit`, so you can pass in [`commit` flags](https://git-scm.com/docs/git-commit).
 
 For example, you can stage all changes in tracked files with as you commit:
 
 ```sh
-aicommits --all # or -a
+ollama-commits --all # or -a
 ```
 
-> 👉 **Tip:** Use the `aic` alias if `aicommits` is too long for you.
+> 👉 **Tip:** Use the `llc` alias if `ollama-commits` is too long for you.
 
 #### Generate multiple recommendations
 
 Sometimes the recommended commit message isn't the best so you want it to generate a few to pick from. You can generate multiple commit messages at once by passing in the `--generate <i>` flag, where 'i' is the number of generated messages:
 
 ```sh
-aicommits --generate <i> # or -g <i>
+ollama-commits --generate <i> # or -g <i>
 ```
-
-> Warning: this uses more tokens, meaning it costs more.
 
 #### Generating Conventional Commits
 
-If you'd like to generate [Conventional Commits](https://conventionalcommits.org/), you can use the `--type` flag followed by `conventional`. This will prompt `aicommits` to format the commit message according to the Conventional Commits specification:
+If you'd like to generate [Conventional Commits](https://conventionalcommits.org/), you can use the `--type` flag followed by `conventional`. This will prompt `ollama-commits` to format the commit message according to the Conventional Commits specification:
 
 ```sh
-aicommits --type conventional # or -t conventional
+ollama-commits --type conventional # or -t conventional
 ```
 
 This feature can be useful if your project follows the Conventional Commits standard or if you're using tools that rely on this commit format.
 
 ### Git hook
 
-You can also integrate _aicommits_ with Git via the [`prepare-commit-msg`](https://git-scm.com/docs/githooks#_prepare_commit_msg) hook. This lets you use Git like you normally would, and edit the commit message before committing.
+You can also integrate _ollama-commits_ with Git via the [`prepare-commit-msg`](https://git-scm.com/docs/githooks#_prepare_commit_msg) hook. This lets you use Git like you normally would, and edit the commit message before committing.
 
 #### Install
 
 In the Git repository you want to install the hook in:
 
 ```sh
-aicommits hook install
+ollama-commits hook install
 ```
 
 #### Uninstall
@@ -103,7 +99,7 @@ aicommits hook install
 In the Git repository you want to uninstall the hook from:
 
 ```sh
-aicommits hook uninstall
+ollama-commits hook uninstall
 ```
 
 #### Usage
@@ -117,7 +113,7 @@ aicommits hook uninstall
 
    > If you ever want to write your own message instead of generating one, you can simply pass one in: `git commit -m "My message"`
 
-2. Aicommits will generate the commit message for you and pass it back to Git. Git will open it with the [configured editor](https://docs.github.com/en/get-started/getting-started-with-git/associating-text-editors-with-git) for you to review/edit it.
+2. Ollama-commits will generate the commit message for you and pass it back to Git. Git will open it with the [configured editor](https://docs.github.com/en/get-started/getting-started-with-git/associating-text-editors-with-git) for you to review/edit it.
 
 3. Save and close the editor to commit!
 
@@ -128,19 +124,19 @@ aicommits hook uninstall
 To retrieve a configuration option, use the command:
 
 ```sh
-aicommits config get <key>
+ollama-commits config get <key>
 ```
 
-For example, to retrieve the API key, you can use:
+For example, to retrieve the model, you can use:
 
 ```sh
-aicommits config get OPENAI_KEY
+ollama-commits config get model
 ```
 
 You can also retrieve multiple configuration options at once by separating them with spaces:
 
 ```sh
-aicommits config get OPENAI_KEY generate
+ollama-commits config get model generate
 ```
 
 ### Setting a configuration value
@@ -148,34 +144,34 @@ aicommits config get OPENAI_KEY generate
 To set a configuration option, use the command:
 
 ```sh
-aicommits config set <key>=<value>
+ollama-commits config set <key>=<value>
 ```
 
-For example, to set the API key, you can use:
+For example, to set the model, you can use:
 
 ```sh
-aicommits config set OPENAI_KEY=<your-api-key>
+ollama-commits config set model=llama3.2
 ```
 
 You can also set multiple configuration options at once by separating them with spaces, like
 
 ```sh
-aicommits config set OPENAI_KEY=<your-api-key> generate=3 locale=en
+ollama-commits config set model=llama3.2 generate=3 locale=en
 ```
 
 ### Options
 
-#### OPENAI_KEY
+#### model
 
-Required
+Default: `deepseek-coder:instruct`
 
-The OpenAI API key. You can retrieve it from [OpenAI API Keys page](https://platform.openai.com/account/api-keys).
+The Ollama model to use for generating commit messages. Make sure you have pulled the model you want to use with `ollama pull <model>`.
 
 #### locale
 
 Default: `en`
 
-The locale to use for the generated commit messages. Consult the list of codes in: https://wikipedia.org/wiki/List_of_ISO_639-1_codes.
+The locale to use for the generated commit messages. Consult the list of codes in: https://wikipedia.org/wiki/List_of_ISO_639_1_codes.
 
 #### generate
 
@@ -183,34 +179,14 @@ Default: `1`
 
 The number of commit messages to generate to pick from.
 
-Note, this will use more tokens as it generates more results.
-
-#### proxy
-
-Set a HTTP/HTTPS proxy to use for requests.
-
-To clear the proxy option, you can use the command (note the empty value after the equals sign):
-
-```sh
-aicommits config set proxy=
-```
-
-#### model
-
-Default: `gpt-3.5-turbo`
-
-The Chat Completions (`/v1/chat/completions`) model to use. Consult the list of models available in the [OpenAI Documentation](https://platform.openai.com/docs/models/model-endpoint-compatibility).
-
-> Tip: If you have access, try upgrading to [`gpt-4`](https://platform.openai.com/docs/models/gpt-4) for next-level code analysis. It can handle double the input size, but comes at a higher cost. Check out OpenAI's website to learn more.
-
 #### timeout
 
-The timeout for network requests to the OpenAI API in milliseconds.
+The timeout for network requests to the Ollama API in milliseconds.
 
 Default: `10000` (10 seconds)
 
 ```sh
-aicommits config set timeout=20000 # 20s
+ollama-commits config set timeout=20000 # 20s
 ```
 
 #### max-length
@@ -220,7 +196,7 @@ The maximum character length of the generated commit message.
 Default: `50`
 
 ```sh
-aicommits config set max-length=100
+ollama-commits config set max-length=100
 ```
 
 #### type
@@ -230,20 +206,18 @@ Default: `""` (Empty string)
 The type of commit message to generate. Set this to "conventional" to generate commit messages that follow the Conventional Commits specification:
 
 ```sh
-aicommits config set type=conventional
+ollama-commits config set type=conventional
 ```
 
 You can clear this option by setting it to an empty string:
 
 ```sh
-aicommits config set type=
+ollama-commits config set type=
 ```
 
 ## How it works
 
-This CLI tool runs `git diff` to grab all your latest code changes, sends them to OpenAI's GPT-3, then returns the AI generated commit message.
-
-Video coming soon where I rebuild it from scratch to show you how to easily build your own CLI tools powered by AI.
+This CLI tool runs `git diff` to grab all your latest code changes, sends them to your local Ollama instance, then returns the AI generated commit message.
 
 ## Maintainers
 
@@ -253,4 +227,4 @@ Video coming soon where I rebuild it from scratch to show you how to easily buil
 
 ## Contributing
 
-If you want to help fix a bug or implement a feature in [Issues](https://github.com/Nutlope/aicommits/issues), checkout the [Contribution Guide](CONTRIBUTING.md) to learn how to setup and test the project
+If you want to help fix a bug or implement a feature in [Issues](https://github.com/Nutlope/ollama-commits/issues), checkout the [Contribution Guide](CONTRIBUTING.md) to learn how to setup and test the project

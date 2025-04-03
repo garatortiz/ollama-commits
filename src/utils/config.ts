@@ -2,7 +2,6 @@ import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
 import ini from 'ini';
-import type { TiktokenModel } from '@dqbd/tiktoken';
 import { fileExists } from './fs.js';
 import { KnownError } from './error.js';
 
@@ -21,17 +20,6 @@ const parseAssert = (name: string, condition: any, message: string) => {
 };
 
 const configParsers = {
-	OPENAI_KEY(key?: string) {
-		if (!key) {
-			throw new KnownError(
-				'Please set your OpenAI API key via `aicommits config set OPENAI_KEY=<your token>`'
-			);
-		}
-		parseAssert('OPENAI_KEY', key.startsWith('sk-'), 'Must start with "sk-"');
-		// Key can range from 43~51 characters. There's no spec to assert this.
-
-		return key;
-	},
 	locale(locale?: string) {
 		if (!locale) {
 			return 'en';
@@ -41,7 +29,7 @@ const configParsers = {
 		parseAssert(
 			'locale',
 			/^[a-z-]+$/i.test(locale),
-			'Must be a valid locale (letters and dashes/underscores). You can consult the list of codes in: https://wikipedia.org/wiki/List_of_ISO_639-1_codes'
+			'Must be a valid locale (letters and dashes/underscores). You can consult the list of codes in: https://wikipedia.org/wiki/List_of_ISO_639_1_codes'
 		);
 		return locale;
 	},
@@ -70,15 +58,6 @@ const configParsers = {
 		);
 
 		return type as CommitType;
-	},
-	proxy(url?: string) {
-		if (!url || url.length === 0) {
-			return undefined;
-		}
-
-		parseAssert('proxy', /^https?:\/\//.test(url), 'Must be a valid URL');
-
-		return url;
 	},
 	model(model?: string) {
 		if (!model || model.length === 0) {

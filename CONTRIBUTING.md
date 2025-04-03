@@ -42,18 +42,18 @@ node ./dist/cli.mjs
 
 ## Testing
 
-Testing requires passing in `OPENAI_KEY` as an environment variable:
+Testing requires having Ollama running locally with the model you want to test with:
 
 ```sh
-OPENAI_KEY=<your OPENAI key> pnpm test
-```
+# Make sure Ollama is running
+ollama serve
 
+# In another terminal, pull the model you want to test with
+ollama pull deepseek-coder:instruct
 
-You can still run tests that don't require `OPENAI_KEY` but will not test the main functionality:
-```
+# Run the tests
 pnpm test
 ```
-
 
 ## Using & testing your changes
 
@@ -64,12 +64,12 @@ Publish your current branch to a `npm/*` branch on your GitHub repository:
 $ pnpm dlx git-publish
 
 ✔ Successfully published branch! Install with command:
-  → npm i 'Nutlope/aicommits#npm/develop'
+  → npm i 'Nutlope/ollama-commits#npm/develop'
 ```
 
-> Note: The `Nutlope/aicommits` will be replaced with your fork's URL.
+> Note: The `Nutlope/ollama-commits` will be replaced with your fork's URL.
 
 Now, you can run the branch in your project:
 ```sh
-$ pnpm dlx 'Nutlope/aicommits#npm/develop' # same as running `npx aicommits`
+$ pnpm dlx 'Nutlope/ollama-commits#npm/develop' # same as running `npx ollama-commits`
 ```

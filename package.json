@@ -1,5 +1,5 @@
 {
-	"name": "aicommits",
+	"name": "ollama-commits",
 	"version": "0.0.0-semantic-release",
 	"description": "Writes your git commit messages for you with Ollama AI",
 	"keywords": [
@@ -16,8 +16,8 @@
 		"dist"
 	],
 	"bin": {
-		"aicommits": "./dist/cli.mjs",
-		"aic": "./dist/cli.mjs"
+		"ollama-commits": "./dist/cli.mjs",
+		"llc": "./dist/cli.mjs"
 	},
 	"scripts": {
 		"build": "pkgroll --minify",

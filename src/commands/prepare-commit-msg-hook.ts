@@ -27,13 +27,9 @@ export default () =>
 			return;
 		}
 
-		intro(bgCyan(black(' aicommits ')));
+		intro(bgCyan(black(' ollama-commits ')));
 
-		const { env } = process;
-		const config = await getConfig({
-			proxy:
-				env.https_proxy || env.HTTPS_PROXY || env.http_proxy || env.HTTP_PROXY,
-		});
+		const config = await getConfig();
 
 		const s = spinner();
 		s.start('The AI is analyzing your changes');
